@@ -1,0 +1,14 @@
+﻿@model CapaNegocioDatos.Animal
+@{
+}
+<h2>Animales</h2>
+<h3>Registrar animal</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.Nombre)
+    @Html.TextBoxFor(m => m.Nombre)
+    @Html.LabelFor(m => m.Descripcion)
+    @Html.TextBoxFor(m => m.Descripcion)
+    <input type="submit" value="Guardar" />
+}

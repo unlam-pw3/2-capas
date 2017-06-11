@@ -1,0 +1,18 @@
+﻿@model PW3.arq_2capas.Models.Coordinacion.PlanViewModel
+
+<h2>Coordinación Planes</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+{
+    <p>Error: @ViewBag.MensajeError</p>
+}
+
+@using (Html.BeginForm("Create"))
+{
+
+    @Html.EnumDropDownListFor(m=> m.DiaDeLaSemana)
+    @Html.DropDownListFor(m=>m.IdAnimal, new SelectList(ViewBag.Animales, "IdAnimal", "Nombre"));
+    @Html.DropDownListFor( m=> m.IdCuidador, new SelectList(ViewBag.Cuidadores, "IdCuidador", "Nombre"));
+
+    <input type="submit" value="Registrar" />
+}

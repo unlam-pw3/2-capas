@@ -1,0 +1,23 @@
+﻿@model IList<CapaNegocioDatos.PlanCuidado>
+
+<h2>Listado Animales</h2>
+
+@Html.ActionLink("Crear plan de cuidado", "Create")
+<br />
+<table>
+    <tr>
+        <th>Día</th>
+        <th>Animal</th>
+        <th>Cuidador</th>
+    </tr>
+    <tbody>
+        @foreach (var animal in Model)
+        {
+            <tr>
+                <th>@animal.DiaSemana</th>
+                <th>@animal.Animal.Nombre</th>
+                <th>@animal.Cuidador.Nombre</th>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,28 @@
+﻿@model IList<CapaNegocioDatos.Animal>
+
+<h2>Listado Animales</h2>
+
+@if (ViewBag.AnimalCreado)
+{
+    <p>El animal ha sido registrado exitosamente.!</p>
+}
+
+@Html.ActionLink("Crear", "Create")
+<br/>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+    </tr>
+    <tbody>
+        @foreach (var animal in Model)
+        {
+            <tr>
+                <th>@animal.IdAnimal</th>
+                <th>@animal.Nombre</th>
+                <th>@animal.Descripcion</th>
+            </tr>
+        }
+    </tbody>
+</table>

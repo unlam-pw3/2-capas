@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ZooModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Animales">
+          <Key>
+            <PropertyRef Name="IdAnimal" />
+          </Key>
+          <Property Name="IdAnimal" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="300" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cuidadores">
+          <Key>
+            <PropertyRef Name="IdCuidador" />
+          </Key>
+          <Property Name="IdCuidador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="75" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlanesCuidado">
+          <Key>
+            <PropertyRef Name="IdPlanCuidado" />
+          </Key>
+          <Property Name="IdPlanCuidado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdAnimal" Type="int" Nullable="false" />
+          <Property Name="IdCuidador" Type="int" Nullable="false" />
+          <Property Name="DiaSemana" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PlanesCuidado_Animales">
+          <End Role="Animales" Type="Self.Animales" Multiplicity="1" />
+          <End Role="PlanesCuidado" Type="Self.PlanesCuidado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animales">
+              <PropertyRef Name="IdAnimal" />
+            </Principal>
+            <Dependent Role="PlanesCuidado">
+              <PropertyRef Name="IdAnimal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlanesCuidado_Cuidadores">
+          <End Role="Cuidadores" Type="Self.Cuidadores" Multiplicity="1" />
+          <End Role="PlanesCuidado" Type="Self.PlanesCuidado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuidadores">
+              <PropertyRef Name="IdCuidador" />
+            </Principal>
+            <Dependent Role="PlanesCuidado">
+              <PropertyRef Name="IdCuidador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZooModelStoreContainer">
+          <EntitySet Name="Animales" EntityType="Self.Animales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cuidadores" EntityType="Self.Cuidadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlanesCuidado" EntityType="Self.PlanesCuidado" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PlanesCuidado_Animales" Association="Self.FK_PlanesCuidado_Animales">
+            <End Role="Animales" EntitySet="Animales" />
+            <End Role="PlanesCuidado" EntitySet="PlanesCuidado" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlanesCuidado_Cuidadores" Association="Self.FK_PlanesCuidado_Cuidadores">
+            <End Role="Cuidadores" EntitySet="Cuidadores" />
+            <End Role="PlanesCuidado" EntitySet="PlanesCuidado" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ZooModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Animal">
+          <Key>
+            <PropertyRef Name="IdAnimal" />
+          </Key>
+          <Property Name="IdAnimal" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PlanesCuidadores" Relationship="Self.FK_PlanesCuidado_Animales" FromRole="Animales" ToRole="PlanesCuidado" />
+        </EntityType>
+        <EntityType Name="Cuidador">
+          <Key>
+            <PropertyRef Name="IdCuidador" />
+          </Key>
+          <Property Name="IdCuidador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="75" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PlanesCuidadores" Relationship="Self.FK_PlanesCuidado_Cuidadores" FromRole="Cuidadores" ToRole="PlanesCuidado" />
+        </EntityType>
+        <EntityType Name="PlanCuidado">
+          <Key>
+            <PropertyRef Name="IdPlanCuidado" />
+          </Key>
+          <Property Name="IdPlanCuidado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdAnimal" Type="Int32" Nullable="false" />
+          <Property Name="IdCuidador" Type="Int32" Nullable="false" />
+          <Property Name="DiaSemana" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Animal" Relationship="Self.FK_PlanesCuidado_Animales" FromRole="PlanesCuidado" ToRole="Animales" />
+          <NavigationProperty Name="Cuidador" Relationship="Self.FK_PlanesCuidado_Cuidadores" FromRole="PlanesCuidado" ToRole="Cuidadores" />
+        </EntityType>
+        <Association Name="FK_PlanesCuidado_Animales">
+          <End Role="Animales" Type="ZooModel.Animal" Multiplicity="1" />
+          <End Role="PlanesCuidado" Type="ZooModel.PlanCuidado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Animales">
+              <PropertyRef Name="IdAnimal" />
+            </Principal>
+            <Dependent Role="PlanesCuidado">
+              <PropertyRef Name="IdAnimal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlanesCuidado_Cuidadores">
+          <End Role="Cuidadores" Type="ZooModel.Cuidador" Multiplicity="1" />
+          <End Role="PlanesCuidado" Type="ZooModel.PlanCuidado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuidadores">
+              <PropertyRef Name="IdCuidador" />
+            </Principal>
+            <Dependent Role="PlanesCuidado">
+              <PropertyRef Name="IdCuidador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ZooEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Animals" EntityType="ZooModel.Animal" />
+          <EntitySet Name="Cuidadors" EntityType="ZooModel.Cuidador" />
+          <EntitySet Name="PlanCuidadoes" EntityType="ZooModel.PlanCuidado" />
+          <AssociationSet Name="FK_PlanesCuidado_Animales" Association="Self.FK_PlanesCuidado_Animales">
+            <End Role="Animales" EntitySet="Animals" />
+            <End Role="PlanesCuidado" EntitySet="PlanCuidadoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlanesCuidado_Cuidadores" Association="Self.FK_PlanesCuidado_Cuidadores">
+            <End Role="Cuidadores" EntitySet="Cuidadors" />
+            <End Role="PlanesCuidado" EntitySet="PlanCuidadoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ZooModelStoreContainer" CdmEntityContainer="ZooEntities">
+          <EntitySetMapping Name="Animals">
+            <EntityTypeMapping TypeName="ZooModel.Animal">
+              <MappingFragment StoreEntitySet="Animales">
+                <ScalarProperty Name="IdAnimal" ColumnName="IdAnimal" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cuidadors">
+            <EntityTypeMapping TypeName="ZooModel.Cuidador">
+              <MappingFragment StoreEntitySet="Cuidadores">
+                <ScalarProperty Name="IdCuidador" ColumnName="IdCuidador" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanCuidadoes">
+            <EntityTypeMapping TypeName="ZooModel.PlanCuidado">
+              <MappingFragment StoreEntitySet="PlanesCuidado">
+                <ScalarProperty Name="IdPlanCuidado" ColumnName="IdPlanCuidado" />
+                <ScalarProperty Name="IdAnimal" ColumnName="IdAnimal" />
+                <ScalarProperty Name="IdCuidador" ColumnName="IdCuidador" />
+                <ScalarProperty Name="DiaSemana" ColumnName="DiaSemana" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
